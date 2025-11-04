@@ -35,6 +35,12 @@ src/main/java/br/com/alunoonline/api/
 - **Email**: Endereço de email
 - **CPF**: Cadastro de Pessoa Física
 
+### Entidade Professor
+- **ID**: Identificador único (auto-gerado)
+- **Nome**: Nome do professor
+- **Email**: Endereço de email
+- **CPF**: Cadastro de Pessoa Física
+
 ## 🔧 Configuração do Ambiente
 
 ### Pré-requisitos
@@ -71,18 +77,37 @@ A aplicação estará disponível em: `http://localhost:8080`
 
 ## 📚 Endpoints da API
 
-### Base URL
+### Endpoints de Aluno
+
+#### Base URL
 ```
 http://localhost:8080/alunos
 ```
 
-### Endpoints Disponíveis
+#### Endpoints Disponíveis
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | `POST` | `/alunos` | Criar um novo aluno |
 | `GET` | `/alunos` | Listar todos os alunos |
 | `GET` | `/alunos/{id}` | Buscar aluno por ID |
+
+### Endpoints de Professor
+
+#### Base URL
+```
+http://localhost:8080/professores
+```
+
+#### Endpoints Disponíveis
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| `POST` | `/professores` | Criar um novo professor |
+| `GET` | `/professores` | Listar todos os professores |
+| `GET` | `/professores/{id}` | Buscar professor por ID |
+| `PUT` | `/professores/{id}` | Atualizar professor por ID |
+| `DELETE` | `/professores/{id}` | Deletar professor por ID |
 
 ### Exemplos de Uso
 
@@ -107,13 +132,62 @@ curl -X GET http://localhost:8080/alunos
 curl -X GET http://localhost:8080/alunos/1
 ```
 
+### Exemplos de Uso - Professor
+
+#### Criar um novo professor
+```bash
+curl -X POST http://localhost:8080/professores \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nome": "Maria Santos",
+    "email": "maria.santos@email.com",
+    "cpf": "987.654.321-00"
+  }'
+```
+
+#### Listar todos os professores
+```bash
+curl -X GET http://localhost:8080/professores
+```
+
+#### Buscar professor por ID
+```bash
+curl -X GET http://localhost:8080/professores/1
+```
+
+#### Atualizar professor por ID
+```bash
+curl -X PUT http://localhost:8080/professores/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nome": "Maria Santos Silva",
+    "email": "maria.silva@email.com",
+    "cpf": "987.654.321-00"
+  }'
+```
+
+#### Deletar professor por ID
+```bash
+curl -X DELETE http://localhost:8080/professores/1
+```
+
 
 
 ## 🔄 Funcionalidades
 
+### Aluno
 - ✅ Cadastro de alunos
 - ✅ Listagem de todos os alunos
 - ✅ Busca de aluno por ID
+- ✅ Persistência de dados no PostgreSQL
+- ✅ Validação automática de entidades
+
+### Professor
+- ✅ Cadastro de professores
+- ✅ Listagem de todos os professores
+- ✅ Busca de professor por ID
+- ✅ Atualização de professor por ID
+- ✅ Deleção de professor por ID
 - ✅ Persistência de dados no PostgreSQL
 - ✅ Validação automática de entidades
 
