@@ -41,6 +41,11 @@ src/main/java/br/com/alunoonline/api/
 - **Email**: Endereço de email
 - **CPF**: Cadastro de Pessoa Física
 
+### Entidade Disciplina
+- **ID**: Identificador único (auto-gerado)
+- **Nome**: Nome da disciplina
+- **Professor**: Relacionamento com a entidade Professor (Many-to-One)
+
 ## 🔧 Configuração do Ambiente
 
 ### Pré-requisitos
@@ -109,6 +114,23 @@ http://localhost:8080/professores
 | `PUT` | `/professores/{id}` | Atualizar professor por ID |
 | `DELETE` | `/professores/{id}` | Deletar professor por ID |
 
+### Endpoints de Disciplina
+
+#### Base URL
+```
+http://localhost:8080/disciplinas
+```
+
+#### Endpoints Disponíveis
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| `POST` | `/disciplinas` | Criar uma nova disciplina |
+| `GET` | `/disciplinas` | Listar todas as disciplinas |
+| `GET` | `/disciplinas/{id}` | Buscar disciplina por ID |
+| `PUT` | `/disciplinas/{id}` | Atualizar disciplina por ID |
+| `DELETE` | `/disciplinas/{id}` | Deletar disciplina por ID |
+
 ### Exemplos de Uso
 
 #### Criar um novo aluno
@@ -171,7 +193,46 @@ curl -X PUT http://localhost:8080/professores/1 \
 curl -X DELETE http://localhost:8080/professores/1
 ```
 
+### Exemplos de Uso - Disciplina
 
+#### Criar uma nova disciplina
+```bash
+curl -X POST http://localhost:8080/disciplinas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Programação Java",
+    "professor": {
+      "id": 1
+    }
+  }'
+```
+
+#### Listar todas as disciplinas
+```bash
+curl -X GET http://localhost:8080/disciplinas
+```
+
+#### Buscar disciplina por ID
+```bash
+curl -X GET http://localhost:8080/disciplinas/1
+```
+
+#### Atualizar disciplina por ID
+```bash
+curl -X PUT http://localhost:8080/disciplinas/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Programação Java Avançada",
+    "professor": {
+      "id": 1
+    }
+  }'
+```
+
+#### Deletar disciplina por ID
+```bash
+curl -X DELETE http://localhost:8080/disciplinas/1
+```
 
 ## 🔄 Funcionalidades
 
@@ -191,6 +252,15 @@ curl -X DELETE http://localhost:8080/professores/1
 - ✅ Persistência de dados no PostgreSQL
 - ✅ Validação automática de entidades
 
+### Disciplina
+- ✅ Cadastro de disciplinas
+- ✅ Listagem de todas as disciplinas
+- ✅ Busca de disciplina por ID
+- ✅ Atualização de disciplina por ID
+- ✅ Deleção de disciplina por ID
+- ✅ Relacionamento com Professor (Many-to-One)
+- ✅ Persistência de dados no PostgreSQL
+- ✅ Validação automática de entidades
 
 ## 🎥 Demonstrações da API
 
