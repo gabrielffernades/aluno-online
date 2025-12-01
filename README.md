@@ -4,7 +4,7 @@ Sistema de gerenciamento de alunos desenvolvido com Spring Boot para fins acadê
 
 ## 📋 Sobre o Projeto
 
-O **Aluno Online** é uma API REST desenvolvida em Java com Spring Boot que permite o gerenciamento básico de informações de alunos. O sistema oferece operações CRUD (Create, Read, Update, Delete) para manipulação de dados de estudantes.
+O **Aluno Online** é uma API REST desenvolvida em Java com Spring Boot que permite o gerenciamento de informações acadêmicas. O sistema oferece operações CRUD (Create, Read, Update, Delete) completas para manipulação de dados de alunos, professores e disciplinas, com relacionamentos entre as entidades.
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -96,6 +96,8 @@ http://localhost:8080/alunos
 | `POST` | `/alunos` | Criar um novo aluno |
 | `GET` | `/alunos` | Listar todos os alunos |
 | `GET` | `/alunos/{id}` | Buscar aluno por ID |
+| `PUT` | `/alunos/{id}` | Atualizar aluno por ID |
+| `DELETE` | `/alunos/{id}` | Deletar aluno por ID |
 
 ### Endpoints de Professor
 
@@ -152,6 +154,22 @@ curl -X GET http://localhost:8080/alunos
 #### Buscar aluno por ID
 ```bash
 curl -X GET http://localhost:8080/alunos/1
+```
+
+#### Atualizar aluno por ID
+```bash
+curl -X PUT http://localhost:8080/alunos/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "completName": "João Silva Santos",
+    "email": "joao.santos@email.com",
+    "cpf": "123.456.789-00"
+  }'
+```
+
+#### Deletar aluno por ID
+```bash
+curl -X DELETE http://localhost:8080/alunos/1
 ```
 
 ### Exemplos de Uso - Professor
@@ -240,6 +258,8 @@ curl -X DELETE http://localhost:8080/disciplinas/1
 - ✅ Cadastro de alunos
 - ✅ Listagem de todos os alunos
 - ✅ Busca de aluno por ID
+- ✅ Atualização de aluno por ID
+- ✅ Deleção de aluno por ID
 - ✅ Persistência de dados no PostgreSQL
 - ✅ Validação automática de entidades
 
