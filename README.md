@@ -252,6 +252,303 @@ curl -X PUT http://localhost:8080/disciplinas/1 \
 curl -X DELETE http://localhost:8080/disciplinas/1
 ```
 
+## 🔍 API de Pesquisa Interativa
+
+A API de Pesquisa Interativa permite realizar consultas dinâmicas e seguras nas tabelas do sistema, com suporte a filtros e exportação para CSV.
+
+### Base URL
+```
+http://localhost:8080/interactive-search
+```
+
+### Endpoints Disponíveis
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| `GET` | `/interactive-search/tables` | Lista todas as tabelas permitidas |
+| `GET` | `/interactive-search/{table}/columns` | Lista as colunas permitidas de uma tabela |
+| `POST` | `/interactive-search/query` | Executa uma query com filtros e retorna JSON |
+| `POST` | `/interactive-search/export-csv` | Executa uma query e retorna os resultados em CSV |
+
+### Tabelas e Colunas Permitidas
+
+#### Tabela: `aluno`
+Colunas: `id`, `completName`, `email`, `cpf`
+
+#### Tabela: `professor`
+Colunas: `id`, `nome`, `email`, `cpf`
+
+#### Tabela: `disciplina`
+Colunas: `id`, `name`, `professor_id`
+
+### Operações de Filtro
+
+As seguintes operações são suportadas:
+- `contains`: Busca parcial (case-insensitive) - usa ILIKE
+- `equals`: Igualdade exata
+- `gte`: Maior ou igual (>=)
+- `lte`: Menor ou igual (<=)
+
+### Limites
+
+- **Limite padrão**: 200 registros
+- **Limite máximo**: 1000 registros
+
+### Exemplos de Uso
+
+#### 1. Listar Tabelas Disponíveis
+
+**Insomnia:**
+```
+GET http://localhost:8080/interactive-search/tables
+```
+
+**cURL:**
+```bash
+curl -X GET http://localhost:8080/interactive-search/tables
+```
+
+**Resposta:**
+```json
+["aluno", "professor", "disciplina"]
+```
+
+#### 2. Listar Colunas de uma Tabela
+
+**Insomnia:**
+```
+GET http://localhost:8080/interactive-search/aluno/columns
+```
+
+**cURL:**
+```bash
+curl -X GET http://localhost:8080/interactive-search/aluno/columns
+```
+
+**Resposta:**
+```json
+["id", "completName", "email", "cpf"]
+```
+
+#### 3. Executar Query Simples
+
+**Insomnia:**
+```
+POST http://localhost:8080/interactive-search/query
+Content-Type: application/json
+
+{
+  "table": "aluno",
+  "columns": ["id", "completName", "email"],
+  "filters": [
+    {
+      "field": "completName",
+      "op": "contains",
+      "value": "joao"
+    }
+  ],
+  "limit": 100
+}
+```
+
+**cURL:**
+```bash
+curl -X POST http://localhost:8080/interactive-search/query \
+  -H "Content-Type: application/json" \
+  -d '{
+    "table": "aluno",
+    "columns": ["id", "completName", "email"],
+    "filters": [
+      {
+        "field": "completName",
+        "op": "contains",
+        "value": "joao"
+      }
+    ],
+    "limit": 100
+  }'
+```
+
+**Resposta:**
+```json
+{
+  "rows": [
+    {
+      "id": 1,
+      "completName": "João Silva",
+      "email": "joao.silva@email.com"
+    }
+  ]
+}
+```
+
+#### 4. Query com Múltiplos Filtros
+
+**Insomnia:**
+```
+POST http://localhost:8080/interactive-search/query
+Content-Type: application/json
+
+{
+  "table": "aluno",
+  "columns": ["id", "completName", "email", "cpf"],
+  "filters": [
+    {
+      "field": "completName",
+      "op": "contains",
+      "value": "silva"
+    },
+    {
+      "field": "cpf",
+      "op": "equals",
+      "value": "123.456.789-00"
+    }
+  ],
+  "limit": 200
+}
+```
+
+**cURL:**
+```bash
+curl -X POST http://localhost:8080/interactive-search/query \
+  -H "Content-Type: application/json" \
+  -d '{
+    "table": "aluno",
+    "columns": ["id", "completName", "email", "cpf"],
+    "filters": [
+      {
+        "field": "completName",
+        "op": "contains",
+        "value": "silva"
+      },
+      {
+        "field": "cpf",
+        "op": "equals",
+        "value": "123.456.789-00"
+      }
+    ],
+    "limit": 200
+  }'
+```
+
+#### 5. Query em Professores
+
+**Insomnia:**
+```
+POST http://localhost:8080/interactive-search/query
+Content-Type: application/json
+
+{
+  "table": "professor",
+  "columns": ["id", "nome", "email"],
+  "filters": [
+    {
+      "field": "nome",
+      "op": "contains",
+      "value": "maria"
+    }
+  ],
+  "limit": 50
+}
+```
+
+#### 6. Query em Disciplinas
+
+**Insomnia:**
+```
+POST http://localhost:8080/interactive-search/query
+Content-Type: application/json
+
+{
+  "table": "disciplina",
+  "columns": ["id", "name", "professor_id"],
+  "filters": [],
+  "limit": 100
+}
+```
+
+#### 7. Exportar Resultados para CSV
+
+**Insomnia:**
+```
+POST http://localhost:8080/interactive-search/export-csv
+Content-Type: application/json
+
+{
+  "table": "aluno",
+  "columns": ["id", "completName", "email", "cpf"],
+  "filters": [
+    {
+      "field": "completName",
+      "op": "contains",
+      "value": "joao"
+    }
+  ],
+  "limit": 500
+}
+```
+
+**cURL:**
+```bash
+curl -X POST http://localhost:8080/interactive-search/export-csv \
+  -H "Content-Type: application/json" \
+  -d '{
+    "table": "aluno",
+    "columns": ["id", "completName", "email", "cpf"],
+    "filters": [
+      {
+        "field": "completName",
+        "op": "contains",
+        "value": "joao"
+      }
+    ],
+    "limit": 500
+  }' \
+  --output alunos_export.csv
+```
+
+**Resposta:** Arquivo CSV será baixado automaticamente com o nome `export_aluno_[timestamp].csv`
+
+### Tratamento de Erros
+
+A API retorna erros em formato JSON:
+
+**Erro 400 - Bad Request:**
+```json
+{
+  "error": "Tabela inválida ou não permitida: tabela_inexistente"
+}
+```
+
+**Exemplos de erros comuns:**
+- Tabela não permitida
+- Coluna não permitida
+- Operação de filtro inválida
+- Limite excedido (máximo 1000)
+
+**Erro 500 - Internal Server Error:**
+```json
+{
+  "error": "Erro ao executar query: [detalhes do erro]"
+}
+```
+
+### Notas Importantes
+
+1. **Segurança**: A API utiliza whitelist para tabelas e colunas, garantindo que apenas dados permitidos sejam consultados.
+
+2. **Nomes de Colunas**: Os nomes das colunas devem corresponder exatamente aos nomes no banco de dados. Com a configuração atual (`PhysicalNamingStrategyStandardImpl`), as colunas mantêm o nome exato do Java (camelCase). Se você alterar a estratégia de naming, ajuste o mapa `ALLOWED_COLUMNS` no arquivo `InteractiveSearchService.java`.
+
+3. **Localização do Whitelist**: O mapa de colunas permitidas está definido em:
+   ```
+   src/main/java/br/com/alunoonline/api/service/InteractiveSearchService.java
+   ```
+   Linha ~30: `ALLOWED_COLUMNS`
+
+4. **Performance**: Para grandes volumes de dados, sempre defina um `limit` apropriado. O limite padrão é 200 registros.
+
+5. **Filtro `contains`**: Utiliza `ILIKE` do PostgreSQL, que é case-insensitive. O valor é automaticamente envolvido com `%` (ex: "joao" vira "%joao%").
+
 ## 🔄 Funcionalidades
 
 ### Aluno
@@ -281,6 +578,14 @@ curl -X DELETE http://localhost:8080/disciplinas/1
 - ✅ Relacionamento com Professor (Many-to-One)
 - ✅ Persistência de dados no PostgreSQL
 - ✅ Validação automática de entidades
+
+### Pesquisa Interativa
+- ✅ Listagem de tabelas permitidas
+- ✅ Listagem de colunas por tabela
+- ✅ Query dinâmica com filtros (contains, equals, gte, lte)
+- ✅ Exportação de resultados para CSV
+- ✅ Validação de segurança com whitelist
+- ✅ Limite de registros configurável (máx. 1000)
 
 ## 🎥 Demonstrações da API
 
